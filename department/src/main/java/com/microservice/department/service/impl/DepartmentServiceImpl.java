@@ -1,6 +1,7 @@
 package com.microservice.department.service.impl;
 
 import com.microservice.department.entity.DepartmentServiceEntity;
+import com.microservice.department.exception.ResourceNotFoundException;
 import com.microservice.department.repository.DepartmentRepository;
 import com.microservice.department.service.DepartmentService;
 import lombok.AllArgsConstructor;
@@ -24,7 +25,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     public DepartmentServiceEntity getDepartmentByCode(String departmentCode) {
         Optional<DepartmentServiceEntity> fetchedEntity = Optional.ofNullable(departmentRepository.getDepartmentByDepartmentCode(departmentCode));
         if(fetchedEntity.isEmpty()){
-
+            throw new ResourceNotFoundException(String.format("DEPARTMENT WITH CODE %s NOT FOUND!", departmentCode));
         }
         return fetchedEntity.get();
     }
