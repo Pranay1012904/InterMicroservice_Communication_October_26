@@ -3,6 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/InterMicroservice_Communication_3.iml" filepath="$PROJECT_DIR$/.idea/InterMicroservice_Communication_3.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/department.main.iml" filepath="$PROJECT_DIR$/.idea/modules/department.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/employee.main.iml" filepath="$PROJECT_DIR$/.idea/modules/employee.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/employee.test.iml" filepath="$PROJECT_DIR$/.idea/modules/employee.test.iml" />
     </modules>
   </component>
 </project>

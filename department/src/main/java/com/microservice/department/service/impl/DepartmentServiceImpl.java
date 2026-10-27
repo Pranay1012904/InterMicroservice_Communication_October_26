@@ -6,6 +6,8 @@ import com.microservice.department.service.DepartmentService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @AllArgsConstructor
 public class DepartmentServiceImpl implements DepartmentService {
@@ -20,7 +22,10 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public DepartmentServiceEntity getDepartmentByCode(String departmentCode) {
+        Optional<DepartmentServiceEntity> fetchedEntity = Optional.ofNullable(departmentRepository.getDepartmentByDepartmentCode(departmentCode));
+        if(fetchedEntity.isEmpty()){
 
-        return null;
+        }
+        return fetchedEntity.get();
     }
 }
