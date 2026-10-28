@@ -1,7 +1,10 @@
 package com.microservice.department.service.impl;
 
+import com.microservice.department.dto.DepartmentDTO;
 import com.microservice.department.entity.DepartmentServiceEntity;
 import com.microservice.department.exception.ResourceNotFoundException;
+import com.microservice.department.mapper.DepartmentDtoToEntity;
+import com.microservice.department.mapper.DepartmentEntityToDto;
 import com.microservice.department.repository.DepartmentRepository;
 import com.microservice.department.service.DepartmentService;
 import lombok.AllArgsConstructor;
@@ -14,19 +17,21 @@ import java.util.Optional;
 public class DepartmentServiceImpl implements DepartmentService {
 
     private DepartmentRepository departmentRepository;
+    private DepartmentDtoToEntity departmentDtoToEntity;
+    private DepartmentEntityToDto departmentEntityToDto;
 
     @Override
-    public DepartmentServiceEntity createDepartment(DepartmentServiceEntity department) {
-        DepartmentServiceEntity savedDepartment = departmentRepository.save(department);
-        return savedDepartment;
+    public DepartmentDTO createDepartment(DepartmentDTO department) {
+        DepartmentServiceEntity savedDepartment = departmentRepository.save(departmentDtoToEntity.departmentDtoToEntity(department));
+        return departmentEntityToDto.departmentEntityToDto(savedDepartment);
     }
 
     @Override
-    public DepartmentServiceEntity getDepartmentByCode(String departmentCode) {
+    public DepartmentDTO getDepartmentByCode(String departmentCode) {
         Optional<DepartmentServiceEntity> fetchedEntity = Optional.ofNullable(departmentRepository.getDepartmentByDepartmentCode(departmentCode));
         if(fetchedEntity.isEmpty()){
             throw new ResourceNotFoundException(String.format("DEPARTMENT WITH CODE %s NOT FOUND!", departmentCode));
         }
-        return fetchedEntity.get();
+        return departmentEntityToDto.departmentEntityToDto(fetchedEntity.get());
     }
 }
