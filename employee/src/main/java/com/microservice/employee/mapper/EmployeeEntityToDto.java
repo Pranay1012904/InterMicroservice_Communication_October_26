@@ -12,5 +12,6 @@ public interface EmployeeEntityToDto {
     @Mapping(source = "firstName", target = "firstName")
     @Mapping(source = "lastName", target = "lastName")
     @Mapping(source = "email", target = "email")
+    @Mapping(source = "departmentCode", target = "departmentCode")
     EmployeeDTO employeeEntityToDto(EmployeeServiceEntity employee);
 }

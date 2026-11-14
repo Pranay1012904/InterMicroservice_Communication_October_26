@@ -20,5 +20,7 @@ public class EmployeeServiceEntity {
     private String lastName;
     @Column(nullable = false, unique = true)
     private String email;
+    @Column
+    private String departmentCode;
 
 }
