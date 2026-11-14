@@ -1,6 +1,7 @@
 package com.microservice.employee.controller;
 
 import com.microservice.employee.dto.EmployeeDTO;
+import com.microservice.employee.dto.ResponseDTO;
 import com.microservice.employee.entity.EmployeeServiceEntity;
 import com.microservice.employee.service.EmployeeService;
 import lombok.AllArgsConstructor;
@@ -21,8 +22,8 @@ public class EmployeeController {
     }
 
     @GetMapping("/findById/{id}")
-    public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable(value = "id") long empId) {
-        EmployeeDTO fetchedEmp = employeeService.getEmployeeById(empId);
-        return new ResponseEntity<>(fetchedEmp,HttpStatus.FOUND);
+    public ResponseEntity<ResponseDTO> getEmployeeById(@PathVariable(value = "id") long empId) {
+        ResponseDTO fetchedEmpDepartment = employeeService.getEmployeeById(empId);
+        return new ResponseEntity<>(fetchedEmpDepartment,HttpStatus.FOUND);
     }
 }
