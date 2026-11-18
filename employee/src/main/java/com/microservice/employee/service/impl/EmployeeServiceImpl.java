@@ -9,6 +9,7 @@ import com.microservice.employee.mapper.EmployeeDtoToEntity;
 import com.microservice.employee.mapper.EmployeeEntityToDto;
 import com.microservice.employee.repository.EmployeeRepository;
 import com.microservice.employee.service.EmployeeService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +48,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @CircuitBreaker(name = "EMPLOYEE-SERVICE",fallbackMethod = "fallback")
     public ResponseDTO getEmployeeById(Long empId) {
 
         EmployeeServiceEntity fetchedEmp = employeeRepository.findById(empId).orElseThrow(() -> new ResourceNotFoundException(
@@ -59,5 +61,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         responseDTO.setEmployeeDto(employeeEntityToDto.employeeEntityToDto(fetchedEmp));
         responseDTO.setDepartmentDto(departmentBody);
         return responseDTO;
+    }
+
+    public ResponseDTO fallback(Long id, Exception ex){
+        throw new ResourceNotFoundException("DEPARTMENT SERVICE NOT WORKING");
     }
 }
