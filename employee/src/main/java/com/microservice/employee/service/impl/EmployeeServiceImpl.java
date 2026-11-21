@@ -10,12 +10,13 @@ import com.microservice.employee.mapper.EmployeeEntityToDto;
 import com.microservice.employee.repository.EmployeeRepository;
 import com.microservice.employee.service.EmployeeService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import lombok.AllArgsConstructor;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -41,6 +42,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Value("${url.path}")
     private String path;
 
+
     @Override
     public EmployeeDTO createEmployee(EmployeeDTO employee) {
         EmployeeServiceEntity savedEmployee = employeeRepository.save(employeeDtoToEntity.employeeDtoToEntity(employee));
@@ -48,7 +50,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    @CircuitBreaker(name = "EMPLOYEE-SERVICE",fallbackMethod = "fallback")
+    @Retry(name = "EMPLOYEE-SERVICE", fallbackMethod = "fallback")
+    //@CircuitBreaker(name = "EMPLOYEE-SERVICE",fallbackMethod = "fallback")
     public ResponseDTO getEmployeeById(Long empId) {
 
         EmployeeServiceEntity fetchedEmp = employeeRepository.findById(empId).orElseThrow(() -> new ResourceNotFoundException(
