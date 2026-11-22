@@ -22,9 +22,10 @@ public class OrderController {
         return "index";
     }
 
-    @PostMapping("/pay")
-    public ResponseEntity<OrderDetails> createOrder(@Valid @RequestBody OrderDetails order) throws RazorpayException {
+    @ResponseBody
+    @PostMapping(value = "/pay" , produces = "application/json")
+    public ResponseEntity<OrderDetails> createOrder(@RequestBody OrderDetails order) throws RazorpayException {
         OrderDetails orderDetails = ordersService.createOrder(order);
-        return new ResponseEntity<>(orderDetails, HttpStatus.OK);
+        return new ResponseEntity<>(orderDetails, HttpStatus.CREATED);
     }
 }

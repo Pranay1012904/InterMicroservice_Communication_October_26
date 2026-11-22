@@ -39,6 +39,6 @@ public class OrdersServiceImpl implements OrdersService {
         order.setRazorpayOrderId(razorpayOrder.get("id"));
         order.setOrderStatus(razorpayOrder.get("status"));
         OrderDetails savedOrder = ordersRepository.save(order);
-        return null;
+        return savedOrder;
     }
 }
