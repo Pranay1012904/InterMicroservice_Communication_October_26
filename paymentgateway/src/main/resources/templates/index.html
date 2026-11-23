@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-B/GM4XqrwHnWXNOWMbloTmrYXZg10cakYGmpfsR/bbzQ6JAJI4ihuyADKLnBgrCe" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <h1>RAZORPAY PAYMENT SYSTEM</h1>
+</div>
+<form id="paymentForm">
+    <div class="form-field">
+        <label class="form-label">Name</label>
+        <input type="name" class="form-control" id="name" placeholder="name">
+    </div>
+    <div class="form-field">
+        <label class="form-label">Email address</label>
+        <input type="email" class="form-control" id="email" placeholder="name@example.com">
+    </div>
+
+    <div class="form-field">
+        <label for="phonenumber" class="form-label">Phone Number</label>
+        <input type="tel" class="form-control" id="phonenumber" placeholder="Phone Number">
+    </div>
+
+    <div class="form-field">
+        <label for="course" class="form-label">Course</label>
+        <input type="text" class="form-control" id="course" placeholder="Course">
+    </div>
+    <div class="form-field">
+        <label for="amount" class="form-label">Amount</label>
+        <input type="number" class="form-control" id="amount" placeholder="Amount In INR">
+    </div>
+
+    <div class="form-field">
+        <button type="text" class="theme-primary btn-solid btn-styled" id="pay" placeholder="Course">PROCEED TO PAY
+        </button>
+    </div>
+</form>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+
+    document.getElementById("paymentForm").addEventListener("submit", async function(event) {
+        // 1. Prevent default page reload
+        event.preventDefault();
+
+        // 2. Collect values matching your HTML input IDs
+        const paymentData = {
+            name: document.getElementById("name").value.trim(),
+            email: document.getElementById("email").value.trim(),
+            phone: document.getElementById("phonenumber").value.trim(),
+            course: document.getElementById("course").value.trim(),
+            amount: parseFloat(document.getElementById("amount").value)
+        };
+
+        // Basic validation check before sending
+        /*if (!paymentData.name || !paymentData.email || !paymentData.phone || !paymentData.course || isNaN(paymentData.amount) || paymentData.amount <= 0) {
+            alert("Please fill in all fields with a valid amount.");
+            return;
+        }*/
+
+        // Disable button to prevent duplicate clicks while processing
+        const payButton = document.getElementById("pay");
+        payButton.disabled = true;
+        payButton.textContent = "PROCESSING...";
+
+        try {
+            // 3. Send POST request to /payment/api/pay
+            const response = await fetch("http://localhost:8080/payment/api/pay", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(paymentData)
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            // 4. Handle the response from Spring Boot
+            const result = await response.json(); // Change to response.text() if your controller returns a plain String
+            console.log("Server Response:", result);
+            var options={
+            "key":"rzp_test_U2uCFEOeAXV3Pg",
+            "amount": result.amount,
+            "currency":"INR",
+            "name":"MyCompany",
+            "description": "Test Transaction",
+            "order_id":result.razorpayOrderId,
+            "receipt":result.email,
+            "prefill": {
+                "name": "User Name",
+                "email": "user.name@example.com",
+                "contact": "9000090000"
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+        };
+         // 2. Initialize Razorpay with the options
+          var rzp1 = new Razorpay(options);
+          rzp1.open();
+          e.preventDefault();
+        } catch (error) {
+            console.error("Failed to send payment data:", error);
+            alert("Payment initialization failed. Please try again.");
+        } finally {
+            // Re-enable button after request completes
+            payButton.disabled = false;
+            payButton.textContent = "PROCEED TO PAY";
+        }
+    });
+</script>
+
+<script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-1a/pXj49ZQ1aHEmrJ+gMw1otqoVsYwlEnlD8mIfY2TV03r20Y0CN7uqx1tQogjPL"
+        crossorigin="anonymous"></script>
+</body>
+</html>
