@@ -40,6 +40,7 @@
         </button>
     </div>
 </form>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
 
     document.getElementById("paymentForm").addEventListener("submit", async function(event) {
@@ -83,7 +84,27 @@
             // 4. Handle the response from Spring Boot
             const result = await response.json(); // Change to response.text() if your controller returns a plain String
             console.log("Server Response:", result);
-
+            var options={
+            "key":"rzp_test_U2uCFEOeAXV3Pg",
+            "amount": result.amount,
+            "currency":"INR",
+            "name":"MyCompany",
+            "description": "Test Transaction",
+            "order_id":result.razorpayOrderId,
+            "receipt":result.email,
+            "prefill": {
+                "name": "User Name",
+                "email": "user.name@example.com",
+                "contact": "9000090000"
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+        };
+         // 2. Initialize Razorpay with the options
+          var rzp1 = new Razorpay(options);
+          rzp1.open();
+          e.preventDefault();
         } catch (error) {
             console.error("Failed to send payment data:", error);
             alert("Payment initialization failed. Please try again.");
