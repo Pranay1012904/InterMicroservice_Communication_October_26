@@ -53,8 +53,7 @@ Before running the project, ensure you have the following installed:
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com
-cd your-repo-name
+git clone https://github.com/Pranay1012904/InterMicroservice_Communication_PaymentGateway_Resilience4j_October_26.git
 ```
 
 ### 2. Configure Environment Variables
