@@ -104,7 +104,7 @@
          // 2. Initialize Razorpay with the options
           var rzp1 = new Razorpay(options);
           rzp1.open();
-          e.preventDefault();
+          //e.preventDefault();
         } catch (error) {
             console.error("Failed to send payment data:", error);
             alert("Payment initialization failed. Please try again.");
